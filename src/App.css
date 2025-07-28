@@ -196,11 +196,12 @@
   box-shadow: 0 2px 16px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
 .color-row {
   display: flex;
   flex-direction: row;
-  gap: 2px;
+  gap: 0;
 }
 .color-cell {
   width: 100px;
@@ -210,6 +211,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  padding: 0;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Bỏ border phải cho cell cuối cùng mỗi hàng */
+.color-row .color-cell:last-child {
+  border-right: none;
+}
+
+/* Bỏ border dưới cho hàng cuối cùng */
+.color-grid .color-row:last-child .color-cell {
+  border-bottom: none;
 }
 
 .control-panel {
@@ -338,7 +354,7 @@
 .merged-cell {
   background: url('./assets/xanh.png') no-repeat center center;
   background-size: cover;
-  min-width: 203px;
+  min-width: 200px;
   display: flex;
   height: 120px;
   align-items: center;
@@ -348,7 +364,7 @@
 .merged-cell-4 {
   background: url('./assets/xanh.png') no-repeat center center;
   background-size: cover; 
-  min-width: 411px;
+  min-width: 400px;
   height: 120px;
   display: flex;
   align-items: center;
@@ -384,7 +400,7 @@
   gap: 8px;
 }
 .merged-icon-box {
-  width: 100px;
+  width: 85px;
   height: 50px;
   background-size: cover;
   background-position: center;
