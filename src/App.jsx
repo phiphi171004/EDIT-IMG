@@ -571,7 +571,10 @@ function App() {
         </button>
         <div className="color-grid">
           {/* Tiêu đề lớn trên đầu lưới */}
-          <div className="main-title-bar">{mainTitle}</div>
+          <div className="main-title-bar">
+            {mainTitle}
+            <div className="watermark-banner">toolsheap</div>
+          </div>
           {/* Hàng đầu tiên: merge 2 ô đầu */}
           <div className="color-row">
             <div className="color-cell merged-cell" style={{ gridColumn: `span 2`, position: 'relative' }}>
