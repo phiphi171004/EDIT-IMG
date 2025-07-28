@@ -349,6 +349,24 @@
   letter-spacing: 2px;
   box-sizing: border-box;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+.watermark-banner {
+  position: absolute;
+  top: 26px;
+  right: -73px;
+  background: rgba(0, 0, 0, 0.15);
+  color: #ff000a;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 8px 65px;
+  transform: rotate(37deg);
+  pointer-events: none;
+  letter-spacing: 2px;
+  z-index: 2;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .merged-cell {
