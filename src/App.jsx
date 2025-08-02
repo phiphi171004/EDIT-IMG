@@ -610,7 +610,7 @@ function App() {
                     onClick={() => openAdjustModal(imageIndex)}
                   />
                 ) : (
-                  <span className="grid-cell-placeholder">Ảnh lưới</span>
+                  <span className="grid-cell-placeholder">100×120px</span>
                 )}
                                  {gridImages[imageIndex] && (
                    <div className="drag-handle">⤡</div>
@@ -678,7 +678,7 @@ function App() {
                         }}
                     />
                   ) : (
-                    <span className="grid-cell-placeholder">Ảnh lưới</span>
+                    <span className="grid-cell-placeholder">100×120px</span>
                   )}
                   {gridImages[imageIndex] && (
                     <div className="drag-handle">⤡</div>
@@ -727,7 +727,7 @@ function App() {
                         onClick={() => openAdjustModal(imageIndex)}
                       />
                     ) : (
-                      <span className="grid-cell-placeholder">Ảnh lưới</span>
+                      <span className="grid-cell-placeholder">100×120px</span>
                     )}
                     {gridImages[imageIndex] && (
                       <div className="drag-handle">⤡</div>
