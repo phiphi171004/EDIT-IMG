@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import imgUp from './assets/img-up.png';
 import imgDown from './assets/img-down.png';
 import './App.css';
@@ -7,6 +7,32 @@ import domtoimage from 'dom-to-image-more';
 function App() {
   const [rows, setRows] = useState(4);
   const [cols, setCols] = useState(10);
+  
+  // Function để lấy kích thước thực tế của ô từ CSS
+  const getCellDimensions = () => {
+    // Lấy kích thước từ CSS computed styles
+    const tempDiv = document.createElement('div');
+    tempDiv.className = 'color-cell';
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.visibility = 'hidden';
+    document.body.appendChild(tempDiv);
+    
+    const computedStyle = window.getComputedStyle(tempDiv);
+    const width = parseInt(computedStyle.width);
+    const height = parseInt(computedStyle.height);
+    
+    document.body.removeChild(tempDiv);
+    
+    return { width, height };
+  };
+  
+  // State để lưu kích thước thực tế
+  const [cellDimensions, setCellDimensions] = useState({ width: 75, height: 120 });
+  
+  // Cập nhật kích thước khi component mount
+  useEffect(() => {
+    setCellDimensions(getCellDimensions());
+  }, []);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mainTitle, setMainTitle] = useState('MS:1234');
   const [mergedImg, setMergedImg] = useState(null);
@@ -85,8 +111,8 @@ function App() {
     // Hàng 1: cols - 2 ô (trừ khung tổng avatar)
     totalCells += (cols - 2);
     
-    // Hàng 2: cols - 4 ô (trừ khung tổng 4 ô)
-    totalCells += (cols - 4);
+    // Hàng 2: cols - 6 ô (trừ khung tổng 4 ô và bớt 2 ô)
+    totalCells += (cols - 6);
     
     // Các hàng còn lại: rows - 2 hàng × cols ô
     totalCells += (rows - 2) * cols;
@@ -99,10 +125,11 @@ function App() {
           const img = new Image();
           img.onload = () => {
             // Kiểm tra xem ảnh có vừa với ô không
-            const cellRatio = 85 / 120; // width/height của ô
+            const cellRatio = cellDimensions.width / cellDimensions.height; // width/height thực tế của ô
             const imageRatio = img.width / img.height;
             
-            const fits = imageRatio <= cellRatio; // Ảnh dọc hoặc vuông thì vừa
+            // Ảnh dọc (tỷ lệ < 1) sẽ dùng contain để hiển thị toàn bộ, ảnh ngang (tỷ lệ > 1) sẽ dùng cover
+            const fits = imageRatio <= cellRatio; // Ảnh dọc thì dùng contain, ảnh ngang thì dùng cover
             
             resolve({
               index: index,
@@ -305,9 +332,9 @@ function App() {
         endIdx = cols - 2;
       } else if (rowIdx === 1) {
         startIdx = cols - 2;
-        endIdx = cols - 2 + (cols - 4);
+        endIdx = cols - 2 + (cols - 6);
       } else if (rowIdx !== null) {
-        const base = (cols - 2) + (cols - 4) + ((rowIdx - 2) * cols);
+        const base = (cols - 2) + (cols - 6) + ((rowIdx - 2) * cols);
         startIdx = base;
         endIdx = base + cols;
       } else {
@@ -357,10 +384,10 @@ function App() {
             colCount = cols - 2;
           } else if (r === 1) {
             rowStart = cols - 2;
-            rowEnd = cols - 2 + (cols - 4);
-            colCount = cols - 4;
+            rowEnd = cols - 2 + (cols - 6);
+            colCount = cols - 6;
           } else {
-            rowStart = (cols - 2) + (cols - 4) + ((r - 2) * cols);
+            rowStart = (cols - 2) + (cols - 6) + ((r - 2) * cols);
             rowEnd = rowStart + cols;
             colCount = cols;
           }
@@ -610,7 +637,7 @@ function App() {
                     onClick={() => openAdjustModal(imageIndex)}
                   />
                 ) : (
-                  <span className="grid-cell-placeholder">100×120px</span>
+                  <span className="grid-cell-placeholder">{cellDimensions.width}×{cellDimensions.height}px</span>
                 )}
                                  {gridImages[imageIndex] && (
                    <div className="drag-handle">⤡</div>
@@ -650,7 +677,7 @@ function App() {
               )}
             </div>
           </div>
-                      {Array.from({ length: cols - 4 }).map((_, colIdx) => {
+                      {Array.from({ length: cols - 6 }).map((_, colIdx) => {
             const imageIndex = (cols - 2) + colIdx;
             return (
               <div
@@ -678,7 +705,7 @@ function App() {
                         }}
                     />
                   ) : (
-                    <span className="grid-cell-placeholder">100×120px</span>
+                    <span className="grid-cell-placeholder">{cellDimensions.width}×{cellDimensions.height}px</span>
                   )}
                   {gridImages[imageIndex] && (
                     <div className="drag-handle">⤡</div>
@@ -704,7 +731,7 @@ function App() {
           <div className="color-row" key={rowIdx}>
             {Array.from({ length: cols }).map((_, colIdx) => {
               // Tính index cho ảnh (bỏ qua 2 hàng đầu)
-              const imageIndex = (cols - 2) + (cols - 4) + (rowIdx * cols + colIdx);
+              const imageIndex = (cols - 2) + (cols - 6) + (rowIdx * cols + colIdx);
               return (
                 <div
                   className="color-cell cell-relative"
@@ -727,7 +754,7 @@ function App() {
                         onClick={() => openAdjustModal(imageIndex)}
                       />
                     ) : (
-                      <span className="grid-cell-placeholder">100×120px</span>
+                      <span className="grid-cell-placeholder">{cellDimensions.width}×{cellDimensions.height}px</span>
                     )}
                     {gridImages[imageIndex] && (
                       <div className="drag-handle">⤡</div>
