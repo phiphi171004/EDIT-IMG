@@ -569,15 +569,15 @@ function App() {
               <label style={{ fontWeight: 500, marginRight: 8 }}>Số khung:</label>
               <input
                 type="number"
-                min={1}
+                min={0}
                 max={4}
                 value={infoFramesCount}
-                onChange={e => setInfoFramesCount(Math.max(1, Math.min(4, Number(e.target.value))))}
+                onChange={e => setInfoFramesCount(Math.max(0, Math.min(4, Number(e.target.value))))}
                 style={{ width: 60, background: '#333', color: 'white', border: 'none', borderRadius: 6, padding: '4px 8px', fontSize: 16, textAlign: 'center' }}
               />
             </div>
             <div style={{ flex: 1, textAlign: 'center', fontSize: 13, color: '#666', marginLeft: 10 }}>
-              Tối đa 4 khung
+              Từ 0-4 khung
             </div>
           </div>
           
@@ -882,18 +882,20 @@ function App() {
         )}
 
         {/* Hàng thông tin đặc biệt - 4 khung */}
-        <div className="info-container">
-          <div className="info-frames-row">
-            {Array.from({ length: infoFramesCount }).map((_, index) => {
-              
-              return (
-                <div className="info-frame" key={index}>
-                  <div className="info-icon">✓</div>
-                  <div className="info-text">{infoFrameTexts[index]}</div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="info-container" style={{ padding: infoFramesCount === 0 ? '0px' : '24px' }}>
+          {infoFramesCount > 0 && (
+            <div className="info-frames-row">
+              {Array.from({ length: infoFramesCount }).map((_, index) => {
+                
+                return (
+                  <div className="info-frame" key={index}>
+                    <div className="info-icon">✓</div>
+                    <div className="info-text">{infoFrameTexts[index]}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
