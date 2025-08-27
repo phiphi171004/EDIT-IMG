@@ -51,6 +51,13 @@ function App() {
   const [bottomFramesCount, setBottomFramesCount] = useState(3);
   const [bottomFrameImages, setBottomFrameImages] = useState({});
   const [bottomFramesLabel, setBottomFramesLabel] = useState("");
+  const [infoFramesCount, setInfoFramesCount] = useState(4);
+  const [infoFrameTexts, setInfoFrameTexts] = useState({
+    0: "Tất cả Acc bên mình đều trắng thông tin và chỉ mỗi số, không dính bất kì thông tin nào khác... đều đổi được số và mật khẩu.",
+    1: "Acc có số điện thoại ae liên hệ admin để hỗ trợ đổi số hoặc trực tiếp mua từ admin.",
+    2: "Hỗ trợ ae cọc or góp acc dài hạn.",
+    3: "Hỗ trợ ae lên đời acc cũ đổi acc mới"
+  });
 
   // Xử lý chọn ảnh cho khung tổng hàng 1
   const handleMergedImg = (e) => {
@@ -553,6 +560,54 @@ function App() {
             />
           </div>
         </div>
+        
+        {/* Điều khiển số lượng khung thông tin */}
+        <div className="sidebar-section">
+          <div className="sidebar-section-label">Khung thông tin:</div>
+          <div className="sidebar-row" style={{marginBottom: 0}}>
+            <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
+              <label style={{ fontWeight: 500, marginRight: 8 }}>Số khung:</label>
+              <input
+                type="number"
+                min={1}
+                max={4}
+                value={infoFramesCount}
+                onChange={e => setInfoFramesCount(Math.max(1, Math.min(4, Number(e.target.value))))}
+                style={{ width: 60, background: '#333', color: 'white', border: 'none', borderRadius: 6, padding: '4px 8px', fontSize: 16, textAlign: 'center' }}
+              />
+            </div>
+            <div style={{ flex: 1, textAlign: 'center', fontSize: 13, color: '#666', marginLeft: 10 }}>
+              Tối đa 4 khung
+            </div>
+          </div>
+          
+          {/* Input tùy chỉnh text cho từng khung */}
+          {Array.from({ length: infoFramesCount }).map((_, index) => (
+            <div key={index} style={{ marginTop: 12 }}>
+              <label style={{ fontSize: 13, color: '#666', marginBottom: 4, display: 'block' }}>
+                Khung {index + 1}:
+              </label>
+              <textarea
+                value={infoFrameTexts[index] || ''}
+                onChange={(e) => setInfoFrameTexts(prev => ({
+                  ...prev,
+                  [index]: e.target.value
+                }))}
+                placeholder={`Nhập nội dung cho khung ${index + 1}...`}
+                style={{
+                  width: '100%',
+                  minHeight: '60px',
+                  padding: '8px',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  fontSize: '12px',
+                  resize: 'vertical',
+                  fontFamily: 'inherit'
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       {/* Overlay khi sidebar mở */}
       {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
@@ -562,18 +617,29 @@ function App() {
         <button
           style={{
             position: 'absolute',
-            top: -50,
-            right: 0,
-            zIndex: 10,
+            top: 20,
+            right: -306,
+            zIndex: 1000,
             background: '#667eea',
             color: '#fff',
             border: 'none',
             borderRadius: 8,
-            padding: '10px 22px',
+            padding: '12px 24px',
             fontSize: 16,
             fontWeight: 600,
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(102,126,234,0.18)'
+            boxShadow: '0 4px 12px rgba(102,126,234,0.3)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = '#5a6fd8';
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.boxShadow = '0 6px 16px rgba(102,126,234,0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = '#667eea';
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = '0 4px 12px rgba(102,126,234,0.3)';
           }}
           onClick={async () => {
             const grid = document.querySelector('.color-grid');
@@ -594,7 +660,7 @@ function App() {
               });
           }}
         >
-          Download
+          📥 Download
         </button>
         <div className="color-grid">
           {/* Tiêu đề lớn trên đầu lưới */}
@@ -814,6 +880,21 @@ function App() {
             ))}
           </div>
         )}
+
+        {/* Hàng thông tin đặc biệt - 4 khung */}
+        <div className="info-container">
+          <div className="info-frames-row">
+            {Array.from({ length: infoFramesCount }).map((_, index) => {
+              
+              return (
+                <div className="info-frame" key={index}>
+                  <div className="info-icon">✓</div>
+                  <div className="info-text">{infoFrameTexts[index]}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Modal crop ảnh */}
