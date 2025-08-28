@@ -1227,7 +1227,7 @@
 }
 
 .info-frame {
-  background: linear-gradient(135deg, #87CEEB, #5F9EA0);
+  background: #1e90ff;
   border-radius: 12px;
   padding: 16px;
   text-align: left;
